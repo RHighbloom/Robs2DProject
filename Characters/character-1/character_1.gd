@@ -2,8 +2,8 @@ extends CharacterBody2D
 @onready var animation_tree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
 
-const SPEED = 145.0
-const JUMP_VELOCITY = -385.0
+const SPEED = 75.0
+const JUMP_VELOCITY = -300.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 ##Used to determine which animation to be playing -

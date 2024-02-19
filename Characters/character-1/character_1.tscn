@@ -475,10 +475,10 @@ states/walk_left/position = Vector2(636, 46)
 states/walk_right/node = SubResource("AnimationNodeAnimation_r04bx")
 states/walk_right/position = Vector2(620, 187)
 transitions = ["Start", "idle_right", SubResource("AnimationNodeStateMachineTransition_eie5y"), "idle_right", "walk_right", SubResource("AnimationNodeStateMachineTransition_6o8xs"), "walk_right", "idle_right", SubResource("AnimationNodeStateMachineTransition_5hit8"), "idle_left", "walk_right", SubResource("AnimationNodeStateMachineTransition_5377t"), "idle_right", "walk_left", SubResource("AnimationNodeStateMachineTransition_dm0si"), "walk_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_74j18"), "idle_left", "walk_left", SubResource("AnimationNodeStateMachineTransition_k53gp"), "idle_right", "jump_right", SubResource("AnimationNodeStateMachineTransition_p7agt"), "walk_right", "jump_right", SubResource("AnimationNodeStateMachineTransition_aoyh7"), "jump_right", "walk_right", SubResource("AnimationNodeStateMachineTransition_0pprc"), "walk_left", "jump_left", SubResource("AnimationNodeStateMachineTransition_8tym5"), "jump_left", "walk_left", SubResource("AnimationNodeStateMachineTransition_fvjkm"), "jump_left", "fall_left", SubResource("AnimationNodeStateMachineTransition_ilbry"), "fall_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_3a885"), "idle_left", "jump_left", SubResource("AnimationNodeStateMachineTransition_ulg7y"), "jump_right", "fall_right", SubResource("AnimationNodeStateMachineTransition_qe41t"), "fall_right", "idle_right", SubResource("AnimationNodeStateMachineTransition_w807d"), "jump_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_6m7v6"), "idle_left", "fall_left", SubResource("AnimationNodeStateMachineTransition_rb3yd"), "jump_right", "idle_right", SubResource("AnimationNodeStateMachineTransition_ydfw6"), "idle_right", "fall_right", SubResource("AnimationNodeStateMachineTransition_lv4wa"), "slide_left", "get_up_left", SubResource("AnimationNodeStateMachineTransition_hwfnv"), "get_up_left", "walk_left", SubResource("AnimationNodeStateMachineTransition_tlp01"), "walk_left", "slide_left", SubResource("AnimationNodeStateMachineTransition_s8yue"), "walk_right", "slide_right", SubResource("AnimationNodeStateMachineTransition_c82cs"), "slide_right", "get_up_right", SubResource("AnimationNodeStateMachineTransition_21ltw"), "get_up_right", "walk_right", SubResource("AnimationNodeStateMachineTransition_2p8hv"), "get_up_right", "idle_right", SubResource("AnimationNodeStateMachineTransition_2jqk6"), "get_up_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_b7wb6")]
-graph_offset = Vector2(-331.822, -51)
+graph_offset = Vector2(-348.822, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uyatx"]
-size = Vector2(22, 31)
+size = Vector2(19, 28)
 
 [node name="Character-1" type="CharacterBody2D"]
 script = ExtResource("1_o5ok7")
@@ -501,19 +501,8 @@ tree_root = SubResource("AnimationNodeStateMachine_xaqeg")
 anim_player = NodePath("../AnimationPlayer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(-1, 2.5)
+position = Vector2(-1.5, 3)
 shape = SubResource("RectangleShape2D_uyatx")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-visible = false
-offset = Vector2(35, -25)
-zoom = Vector2(2.5, 2.5)
-limit_top = 0
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
-drag_left_margin = 0.59
-drag_right_margin = 0.5
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
