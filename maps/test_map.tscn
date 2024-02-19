@@ -7,6 +7,6 @@
 
 [node name="Character-1" parent="." instance=ExtResource("1_ur3pp")]
 top_level = true
-position = Vector2(253, 157)
+position = Vector2(229, 187)
 
 [node name="TileMap" parent="." instance=ExtResource("2_eqfot")]
