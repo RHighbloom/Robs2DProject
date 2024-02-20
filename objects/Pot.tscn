@@ -1,0 +1,98 @@
+[gd_scene load_steps=14 format=3 uid="uid://be104qbu63yag"]
+
+[ext_resource type="Texture2D" uid="uid://d24y01wjbu4b1" path="res://textures/legacy-dungeon/Assets.png" id="1_f74l6"]
+[ext_resource type="Script" path="res://objects/Damageable.gd" id="3_vfoqm"]
+
+[sub_resource type="GDScript" id="GDScript_hc0pe"]
+script/source = "extends RigidBody2D
+
+func _on_body_entered():
+	pass
+	
+func _on_body_shape_entered():
+	pass
+
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhavr"]
+radius = 6.5
+height = 18.0
+
+[sub_resource type="Animation" id="Animation_ge0ir"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_p6nyn"]
+resource_name = "shatter"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PotSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4fk2l"]
+_data = {
+"RESET": SubResource("Animation_ge0ir"),
+"shatter": SubResource("Animation_p6nyn")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tlbul"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pllwd"]
+animation = &"shatter"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yoalb"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g476e"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dq5aa"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_okhma"]
+states/RESET/node = SubResource("AnimationNodeAnimation_tlbul")
+states/RESET/position = Vector2(378, 100)
+states/shatter/node = SubResource("AnimationNodeAnimation_pllwd")
+states/shatter/position = Vector2(638, 100)
+transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_yoalb"), "RESET", "shatter", SubResource("AnimationNodeStateMachineTransition_g476e"), "shatter", "End", SubResource("AnimationNodeStateMachineTransition_dq5aa")]
+graph_offset = Vector2(-105, -16)
+
+[node name="PotRigidBody" type="RigidBody2D"]
+contact_monitor = true
+script = SubResource("GDScript_hc0pe")
+
+[node name="PotCollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -1)
+shape = SubResource("CapsuleShape2D_bhavr")
+
+[node name="PotSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_f74l6")
+hframes = 4
+region_enabled = true
+region_rect = Rect2(304, 0, 64, 16)
+
+[node name="PotAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4fk2l")
+}
+
+[node name="Damageable" type="Node" parent="."]
+script = ExtResource("3_vfoqm")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_4fk2l")
+}
+tree_root = SubResource("AnimationNodeStateMachine_okhma")
+anim_player = NodePath("../PotAnimationPlayer")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="animation_finished" from="PotAnimationPlayer" to="." method="_on_pot_animation_player_animation_finished"]
+[connection signal="animation_finished" from="AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]

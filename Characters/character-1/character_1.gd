@@ -7,7 +7,7 @@ const JUMP_VELOCITY = -300.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 ##Used to determine which animation to be playing -
-enum STATE {IDLE, WALK, JUMP, ROLL, SLIDE, GETUP}
+enum STATE {IDLE, WALK, JUMP, ROLL, SLIDE, GETUP, ATTACK}
 enum DIRECTION {LEFT, RIGHT}
 
 var current_state = STATE.IDLE
@@ -53,6 +53,12 @@ func set_current_state(new_state):
 				state_machine.travel("get_up_left")
 			else:
 				state_machine.travel("get_up_right")
+		STATE.ATTACK:
+			print("state attack")
+			if (last_direction == DIRECTION.LEFT):
+				state_machine.travel("attack_left")
+			else:
+				state_machine.travel("attack_right")
 	current_state = new_state
 
 func _physics_process(delta):
@@ -67,20 +73,28 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	if Input.is_action_pressed("slide_button"):
-		set_current_state(STATE.SLIDE)
+
+		
+	if (Input.is_action_just_pressed("attack_button")):
+		print("attacking")
+		set_current_state(STATE.ATTACK)
 	
 	var direction = Input.get_axis("ui_left", "ui_right")
+	
+	if Input.is_action_just_pressed("slide_button"):
+		velocity.x = direction * (SPEED + 50)
+		set_current_state(STATE.SLIDE)
+		
 	if direction:
 		set_last_direction(direction)
-		if (current_state != STATE.SLIDE && current_state != STATE.GETUP):
+		if (current_state != STATE.SLIDE && current_state != STATE.GETUP && current_state!=STATE.ATTACK):
 			velocity.x = direction * SPEED
 			if (velocity.y == 0):
 				set_current_state(STATE.WALK)
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED/50.0)
 	else:
-		if (velocity.y == 0 && current_state != STATE.SLIDE && current_state != STATE.GETUP):
+		if (velocity.y == 0 && current_state != STATE.SLIDE && current_state != STATE.GETUP && current_state!=STATE.ATTACK):
 			set_current_state(STATE.IDLE)
 			
 		if (is_on_floor()):
@@ -95,4 +109,6 @@ func _on_animation_tree_animation_finished(anim_name):
 	if (anim_name.contains("slide")):
 		set_current_state(STATE.GETUP)
 	elif (anim_name.contains("get_up")):
+		set_current_state(STATE.IDLE)
+	elif (anim_name.contains("attack")):
 		set_current_state(STATE.IDLE)

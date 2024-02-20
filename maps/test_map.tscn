@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdyntrmwck5ei"]
+[gd_scene load_steps=6 format=3 uid="uid://bdyntrmwck5ei"]
 
 [ext_resource type="PackedScene" uid="uid://drql0bw4g2uyx" path="res://Characters/character-1/character_1.tscn" id="1_ur3pp"]
 [ext_resource type="PackedScene" uid="uid://c2y6by8f453mu" path="res://maps/tile_map.tscn" id="2_eqfot"]
+[ext_resource type="PackedScene" uid="uid://be104qbu63yag" path="res://objects/Pot.tscn" id="3_nmoj8"]
+[ext_resource type="PackedScene" uid="uid://yueaocbor7sc" path="res://objects/lever.tscn" id="4_a6whf"]
+[ext_resource type="PackedScene" uid="uid://1528xx811o53" path="res://objects/bridge.tscn" id="5_2np3j"]
 
 [node name="TestMap" type="Node2D"]
 
@@ -15,3 +18,13 @@ position = Vector2(16, 53)
 position = Vector2(231, 130)
 zoom = Vector2(2.5, 2.5)
 editor_draw_limits = true
+
+[node name="LeverRigidBody" parent="." node_paths=PackedStringArray("objectToToggle") instance=ExtResource("4_a6whf")]
+position = Vector2(254, 66)
+objectToToggle = NodePath("../BridgeStaticBody2D")
+
+[node name="PotRigidBody" parent="." instance=ExtResource("3_nmoj8")]
+position = Vector2(224, 64)
+
+[node name="BridgeStaticBody2D" parent="." instance=ExtResource("5_2np3j")]
+position = Vector2(88, 88)

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://1528xx811o53"]
+
+[ext_resource type="Texture2D" uid="uid://dc7qv4l4ac0f0" path="res://textures/legacy-dungeon/GrassAssets.png" id="1_p7jmp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c1q7k"]
+size = Vector2(48, 8)
+
+[node name="BridgeStaticBody2D" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(24, 4)
+shape = SubResource("RectangleShape2D_c1q7k")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(3, 1)
+texture = ExtResource("1_p7jmp")
+centered = false
+region_enabled = true
+region_rect = Rect2(96, 96, 16, 8)
