@@ -29,3 +29,6 @@ position = Vector2(224, 64)
 [node name="BridgeStaticBody2D" parent="." instance=ExtResource("5_2np3j")]
 position = Vector2(86, 88)
 scale = Vector2(1.1, 1)
+
+[node name="PotRigidBody2" parent="." instance=ExtResource("3_nmoj8")]
+position = Vector2(68, 224)

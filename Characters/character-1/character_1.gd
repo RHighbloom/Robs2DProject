@@ -7,7 +7,7 @@ const JUMP_VELOCITY = -300.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 ##Used to determine which animation to be playing -
-enum STATE {IDLE, WALK, JUMP, ROLL, SLIDE, GETUP, ATTACK}
+enum STATE {IDLE, WALK, JUMP, ROLL, SLIDE, GETUP, ATTACK, WALLHANG, FALL}
 enum DIRECTION {LEFT, RIGHT}
 
 var current_state = STATE.IDLE
@@ -16,6 +16,17 @@ var last_direction = DIRECTION.RIGHT
 
 ##Function
 
+func get_state_priority(state):
+	var priority = 1
+	match(state):
+		STATE.ATTACK, STATE.WALLHANG:
+			priority = 100
+		STATE.GETUP, STATE.SLIDE:
+			priority = 50
+	return priority
+
+func compare_state_priority(state1, state2):
+	return get_state_priority(state1) > get_state_priority(state2)
 
 func set_last_direction(new_direction):
 	if (new_direction > 0):
@@ -27,86 +38,104 @@ func set_current_state(new_state):
 	if (new_state == current_state):
 		return
 	
+	const _left : String = "_left"
+	const _right: String = "_right"
+	
+	var animationString = ""
+	var directionString =  _left if last_direction == DIRECTION.LEFT else _right
+	
 	match(new_state):
 		STATE.IDLE:
-			if (last_direction == DIRECTION.LEFT):
-				state_machine.travel("idle_left")
-			else:
-				state_machine.travel("idle_right")
+			animationString = "idle"
 		STATE.WALK:
-			if (last_direction == DIRECTION.LEFT):
-				state_machine.travel("walk_left")
-			else:
-				state_machine.travel("walk_right")
+			animationString = "walk"
 		STATE.JUMP:
-			if (last_direction == DIRECTION.LEFT):
-				state_machine.travel("jump_left")
-			else:
-				state_machine.travel("jump_right")
+			animationString = "jump"
 		STATE.SLIDE:
-			if (last_direction == DIRECTION.LEFT):
-				state_machine.travel("slide_left")
-			else:
-				state_machine.travel("slide_right")
+			animationString = "slide"
 		STATE.GETUP:
-			if (last_direction == DIRECTION.LEFT):
-				state_machine.travel("get_up_left")
-			else:
-				state_machine.travel("get_up_right")
+			animationString = "get_up"
 		STATE.ATTACK:
-			print("state attack")
-			if (last_direction == DIRECTION.LEFT):
-				state_machine.travel("attack_left")
-			else:
-				state_machine.travel("attack_right")
+			animationString = "attack"
+		STATE.WALLHANG:
+			animationString = "wall_hang"
+		STATE.FALL:
+			animationString = "fall"
+	
+	state_machine.travel(animationString + directionString)
 	current_state = new_state
 
 func _physics_process(delta):
-	if (is_on_wall_only() && current_state == STATE.JUMP):
+	
+	if (is_on_wall_only() && current_state == STATE.JUMP && velocity.y > -150.0):
 		velocity.y = 0
+		set_current_state(STATE.WALLHANG)
 		
-	# Add the gravity.
-	if (not is_on_floor() && not is_on_wall()):
-		velocity.y += gravity * delta
-
+	#add gravity
+	add_gravity(delta)
+	
 	## Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		set_current_state(STATE.JUMP)
 		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-
 		
 	if (Input.is_action_just_pressed("attack_button")):
-		print("attacking")
 		set_current_state(STATE.ATTACK)
 	
 	var direction = Input.get_axis("ui_left", "ui_right")
 	
-	if Input.is_action_just_pressed("slide_button"):
-		velocity.x = direction * (SPEED + 50)
-		set_current_state(STATE.SLIDE)
-		
 	if direction:
-		set_last_direction(direction)
-		if (current_state != STATE.SLIDE && current_state != STATE.GETUP && current_state!=STATE.ATTACK):
-			velocity.x = direction * SPEED
-			if (velocity.y == 0):
-				set_current_state(STATE.WALK)
+		if Input.is_action_just_pressed("slide_button"):
+			set_last_direction(direction)
+			velocity.x = direction * (SPEED + 50)
+			set_current_state(STATE.SLIDE)
+		
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED/50.0)
+			if (!compare_state_priority(current_state, STATE.WALK)):
+				check_for_walking(direction)
+			elif(current_state == STATE.WALLHANG):
+				wallhang_transition(direction)
+			else:
+				velocity.x = move_toward(velocity.x, 0, SPEED/50.0)
 	else:
-		if (velocity.y == 0 && current_state != STATE.SLIDE && current_state != STATE.GETUP && current_state!=STATE.ATTACK):
-			set_current_state(STATE.IDLE)
+		check_for_friction()
+
+	move_and_slide()
+#----------------------------------------------------------------------------------------
+
+func add_gravity(delta):
+	if (not is_on_floor() && not is_on_wall()):
+		velocity.y += gravity * delta
+	if (velocity.y > 0 && !compare_state_priority(current_state, STATE.FALL)):
+		set_current_state(STATE.FALL)
+		
+
+func wallhang_transition(direction: int):
+	if ((direction < 0 && last_direction == DIRECTION.LEFT) ||
+		(direction > 0 && last_direction == DIRECTION.RIGHT)):
+
+			print("Should Climb")
+	else:
+		set_last_direction(direction)
+		velocity.x = direction * SPEED
+		set_current_state(STATE.FALL)
+		print("Should fall")
+
+func check_for_walking(direction):
+	set_last_direction(direction)
+	velocity.x = direction * SPEED
+	if (velocity.y == 0):
+		set_current_state(STATE.WALK)
+
+func check_for_friction():
+	if (velocity.y == 0 && !compare_state_priority(current_state, STATE.WALK)):
+		set_current_state(STATE.IDLE)
 			
 		if (is_on_floor()):
 			velocity.x = move_toward(velocity.x, 0, SPEED/10.0)
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED/25.0)
 
-	move_and_slide()
-	#----------------------------------------------------------------------------------------
 
 func _on_animation_tree_animation_finished(anim_name):
 	if (anim_name.contains("slide")):
@@ -115,6 +144,7 @@ func _on_animation_tree_animation_finished(anim_name):
 		set_current_state(STATE.IDLE)
 	elif (anim_name.contains("attack")):
 		set_current_state(STATE.IDLE)
-
-func _on_lever_rigid_body_body_entered(_body):
-	pass # Replace with function body.
+	elif (anim_name.contains("jump")):
+		set_current_state(STATE.FALL)
+	elif (anim_name.contains("hang")):
+		set_current_state(STATE.IDLE)
