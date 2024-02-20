@@ -1,0 +1,85 @@
+[gd_scene load_steps=14 format=3 uid="uid://yueaocbor7sc"]
+
+[ext_resource type="Script" path="res://objects/lever.gd" id="1_o3wmr"]
+[ext_resource type="Texture2D" uid="uid://d24y01wjbu4b1" path="res://textures/legacy-dungeon/Assets.png" id="2_8y8i6"]
+[ext_resource type="Script" path="res://objects/Toggleable.gd" id="3_7sih5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1hqjq"]
+size = Vector2(14, 12)
+
+[sub_resource type="Animation" id="Animation_lfdj3"]
+resource_name = "toggle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeverSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_4s8lt"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c7q6o"]
+_data = {
+"RESET": SubResource("Animation_4s8lt"),
+"toggle": SubResource("Animation_lfdj3")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2nt5r"]
+animation = &"RESET"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ggncf"]
+animation = &"toggle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_1l6fs"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qw7kx"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_s8631"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_h05pc"]
+states/RESET/node = SubResource("AnimationNodeAnimation_2nt5r")
+states/RESET/position = Vector2(355, 100)
+states/toggle/node = SubResource("AnimationNodeAnimation_ggncf")
+states/toggle/position = Vector2(656, 100)
+transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_1l6fs"), "RESET", "toggle", SubResource("AnimationNodeStateMachineTransition_qw7kx"), "toggle", "End", SubResource("AnimationNodeStateMachineTransition_s8631")]
+
+[node name="LeverRigidBody" type="RigidBody2D"]
+contact_monitor = true
+script = ExtResource("1_o3wmr")
+
+[node name="LeverCollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_1hqjq")
+
+[node name="LeverSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_8y8i6")
+hframes = 2
+region_enabled = true
+region_rect = Rect2(65, 84, 31, 12)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_c7q6o")
+}
+
+[node name="Toggleable" type="Node" parent="."]
+script = ExtResource("3_7sih5")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_c7q6o")
+}
+tree_root = SubResource("AnimationNodeStateMachine_h05pc")
+anim_player = NodePath("../AnimationPlayer")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="toggle_item" from="Toggleable" to="." method="_on_toggleable_toggle_item"]

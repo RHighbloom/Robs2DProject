@@ -27,4 +27,5 @@ objectToToggle = NodePath("../BridgeStaticBody2D")
 position = Vector2(224, 64)
 
 [node name="BridgeStaticBody2D" parent="." instance=ExtResource("5_2np3j")]
-position = Vector2(88, 88)
+position = Vector2(86, 88)
+scale = Vector2(1.1, 1)

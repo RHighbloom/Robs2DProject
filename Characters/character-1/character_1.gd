@@ -62,8 +62,11 @@ func set_current_state(new_state):
 	current_state = new_state
 
 func _physics_process(delta):
+	if (is_on_wall_only() && current_state == STATE.JUMP):
+		velocity.y = 0
+		
 	# Add the gravity.
-	if not is_on_floor():
+	if (not is_on_floor() && not is_on_wall()):
 		velocity.y += gravity * delta
 
 	## Handle jump.
@@ -112,3 +115,6 @@ func _on_animation_tree_animation_finished(anim_name):
 		set_current_state(STATE.IDLE)
 	elif (anim_name.contains("attack")):
 		set_current_state(STATE.IDLE)
+
+func _on_lever_rigid_body_body_entered(_body):
+	pass # Replace with function body.
