@@ -12,6 +12,7 @@ var last_direction = DIRECTION.RIGHT
 var target : Player = null
 var speed : float = 25
 var dying: bool = false
+var hurt: bool = false
 
 func get_direction():
 	const _left : String = "_left"
@@ -35,7 +36,7 @@ func _process(delta):
 	timeSinceLastAttack += delta
 
 func _physics_process(delta):
-	if (!dying):
+	if (!dying && !hurt):
 		if (target == null): 
 			if (vision_cast.is_colliding()):
 				if (vision_cast.get_collider().get_parent().name.to_lower().contains("character")):
@@ -59,10 +60,13 @@ func _on_gate_static_body_use_key():
 
 func _on_damageable_dying():
 	dying = true
-	for _i in self.get_children():
-		if (_i is CollisionShape2D):
-			_i.disabled = true
 
 
 func _on_damageable_on_hit():
+	hurt = true
 	state_machine.travel("hurt_left")
+
+
+func _on_animation_tree_animation_finished(anim_name):
+	if (anim_name == "hurt_left"):
+		hurt = false

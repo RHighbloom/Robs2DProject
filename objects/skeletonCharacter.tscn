@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://37h321ji7woy"]
+[gd_scene load_steps=34 format=3 uid="uid://37h321ji7woy"]
 
 [ext_resource type="Script" path="res://objects/skeletonCharacter.gd" id="1_esgbh"]
 [ext_resource type="Texture2D" uid="uid://ce1pb7f6ipo3r" path="res://textures/Skeleton enemy/Skeleton enemy.png" id="1_fxeo2"]
@@ -285,21 +285,23 @@ advance_mode = 2
 switch_mode = 2
 advance_mode = 2
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5l2ys"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3hb6s"]
 states/attack_left/node = SubResource("AnimationNodeAnimation_jcjnn")
-states/attack_left/position = Vector2(677, 173)
+states/attack_left/position = Vector2(741, 183)
 states/dead_alive/node = SubResource("AnimationNodeAnimation_awlpn")
 states/dead_alive/position = Vector2(402, 100)
 states/death/node = SubResource("AnimationNodeAnimation_dy5nb")
 states/death/position = Vector2(736, 103)
 states/hurt_left/node = SubResource("AnimationNodeAnimation_ojupk")
-states/hurt_left/position = Vector2(634, 242)
+states/hurt_left/position = Vector2(634, 241)
 states/idle_left/node = SubResource("AnimationNodeAnimation_1af63")
-states/idle_left/position = Vector2(526, 173)
+states/idle_left/position = Vector2(476, 183)
 states/idle_right/node = SubResource("AnimationNodeAnimation_aqbr7")
 states/idle_right/position = Vector2(548, 100)
-transitions = ["Start", "dead_alive", SubResource("AnimationNodeStateMachineTransition_kv4i0"), "idle_left", "idle_right", SubResource("AnimationNodeStateMachineTransition_6j0va"), "idle_right", "idle_left", SubResource("AnimationNodeStateMachineTransition_w8dxp"), "idle_left", "attack_left", SubResource("AnimationNodeStateMachineTransition_ypqd8"), "dead_alive", "idle_right", SubResource("AnimationNodeStateMachineTransition_evycb"), "attack_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_66ddp"), "idle_left", "death", SubResource("AnimationNodeStateMachineTransition_witn6"), "attack_left", "death", SubResource("AnimationNodeStateMachineTransition_02ybl"), "death", "End", SubResource("AnimationNodeStateMachineTransition_oaeop"), "idle_left", "hurt_left", SubResource("AnimationNodeStateMachineTransition_0c2pt"), "hurt_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_717ce")]
-graph_offset = Vector2(-74, 42)
+transitions = ["Start", "dead_alive", SubResource("AnimationNodeStateMachineTransition_kv4i0"), "idle_left", "idle_right", SubResource("AnimationNodeStateMachineTransition_6j0va"), "idle_right", "idle_left", SubResource("AnimationNodeStateMachineTransition_w8dxp"), "idle_left", "attack_left", SubResource("AnimationNodeStateMachineTransition_ypqd8"), "dead_alive", "idle_right", SubResource("AnimationNodeStateMachineTransition_evycb"), "attack_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_66ddp"), "idle_left", "death", SubResource("AnimationNodeStateMachineTransition_witn6"), "attack_left", "death", SubResource("AnimationNodeStateMachineTransition_02ybl"), "death", "End", SubResource("AnimationNodeStateMachineTransition_oaeop"), "idle_left", "hurt_left", SubResource("AnimationNodeStateMachineTransition_0c2pt"), "hurt_left", "idle_left", SubResource("AnimationNodeStateMachineTransition_717ce"), "attack_left", "hurt_left", SubResource("AnimationNodeStateMachineTransition_5l2ys")]
+graph_offset = Vector2(-140, 68)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_owmao"]
 size = Vector2(20, 32)
@@ -355,4 +357,5 @@ shape = SubResource("RectangleShape2D_owmao")
 
 [connection signal="dying" from="Damageable" to="." method="_on_damageable_dying"]
 [connection signal="onHit" from="Damageable" to="." method="_on_damageable_on_hit"]
+[connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="animation_finished" from="AnimationTree" to="Damageable" method="_on_animation_tree_animation_finished"]
