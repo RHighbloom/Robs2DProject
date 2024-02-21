@@ -8,6 +8,9 @@ var timeSinceLastCast: float = 0;
 enum DIRECTION {LEFT, RIGHT}
 var last_direction = DIRECTION.RIGHT
 
+var target : Player = null
+var speed : float = 25
+
 func get_direction():
 	const _left : String = "_left"
 	const _right: String = "_right"
@@ -29,23 +32,24 @@ func _ready():
 func _physics_process(delta):
 	timeSinceLastCast += delta
 	
-	if (timeSinceLastCast > 3):
-		state_machine.travel("idle" + get_direction())
-		swap_direction()
+	if (target == null && timeSinceLastCast >= 3):
 		vision_cast.enabled = true
 		timeSinceLastCast = 0
-
-
 		if (vision_cast.is_colliding()):
 			var playerArea: Area2D = vision_cast.get_collider()
-			var player : Player = playerArea.get_parent()
-			print(player.name)
-			move_to_position()
-			
-func move_to_position():
-	
-	pass
-	
+			if (playerArea.get_parent().name.to_lower().contains("character")):
+				target = playerArea.get_parent()
 
+		else:
+			state_machine.travel("idle" + get_direction())
+			swap_direction()
+	elif (target != null):
+		start_attack()
+		
+	
+func start_attack():
+	print("attacking left")
+	state_machine.travel("attack_left")
+	
 func _on_gate_static_body_use_key():
 	animation_tree.active = true
