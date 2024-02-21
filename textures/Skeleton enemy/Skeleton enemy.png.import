@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxmyjw6tvdpum"
-path="res://.godot/imported/portal1_spritesheet.png-a565cb7f25cf19359c517bcc08beb008.ctex"
+uid="uid://ce1pb7f6ipo3r"
+path="res://.godot/imported/Skeleton enemy.png-c156cbbb88edd4adc53550176a8f11fe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/32x32 Portal Asset Pack/32x32 Portal Asset Pack/portal1_spritesheet.png"
-dest_files=["res://.godot/imported/portal1_spritesheet.png-a565cb7f25cf19359c517bcc08beb008.ctex"]
+source_file="res://textures/Skeleton enemy/Skeleton enemy.png"
+dest_files=["res://.godot/imported/Skeleton enemy.png-c156cbbb88edd4adc53550176a8f11fe.ctex"]
 
 [params]
 
