@@ -12,7 +12,7 @@ height = 18.0
 length = 0.001
 
 [sub_resource type="Animation" id="Animation_p6nyn"]
-resource_name = "shatter"
+resource_name = "death"
 length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -30,27 +30,27 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4fk2l"]
 _data = {
 "RESET": SubResource("Animation_ge0ir"),
-"shatter": SubResource("Animation_p6nyn")
+"death": SubResource("Animation_p6nyn")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tlbul"]
 animation = &"RESET"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pllwd"]
-animation = &"shatter"
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5w2l4"]
+animation = &"death"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yoalb"]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_g476e"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_bbaes"]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dq5aa"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_55e0j"]
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_okhma"]
 states/RESET/node = SubResource("AnimationNodeAnimation_tlbul")
 states/RESET/position = Vector2(378, 100)
-states/shatter/node = SubResource("AnimationNodeAnimation_pllwd")
-states/shatter/position = Vector2(638, 100)
-transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_yoalb"), "RESET", "shatter", SubResource("AnimationNodeStateMachineTransition_g476e"), "shatter", "End", SubResource("AnimationNodeStateMachineTransition_dq5aa")]
+states/death/node = SubResource("AnimationNodeAnimation_5w2l4")
+states/death/position = Vector2(594, 100)
+transitions = ["Start", "RESET", SubResource("AnimationNodeStateMachineTransition_yoalb"), "RESET", "death", SubResource("AnimationNodeStateMachineTransition_bbaes"), "death", "End", SubResource("AnimationNodeStateMachineTransition_55e0j")]
 graph_offset = Vector2(-105, -16)
 
 [node name="PotRigidBody" type="RigidBody2D"]

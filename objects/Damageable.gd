@@ -12,7 +12,7 @@ func hit(damage: int):
 	
 	if (health <= 0):
 		audio_player.play()
-		state_machine.travel("shatter")
+		state_machine.travel("death")
 
 
 
