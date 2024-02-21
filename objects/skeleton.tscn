@@ -99,7 +99,7 @@ tracks/2/path = NodePath("RayCast2D:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 2.04),
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(-1, 1), Vector2(1, 1)]
@@ -340,7 +340,6 @@ shape = SubResource("RectangleShape2D_0fj6d")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_owlbl")
-flip_h = true
 hframes = 13
 vframes = 5
 frame = 25
@@ -365,7 +364,7 @@ anim_player = NodePath("../AnimationPlayer")
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-scale = Vector2(-1, 1)
+rotation = -3.14159
 target_position = Vector2(100, 0)
 collide_with_areas = true
 collide_with_bodies = false
@@ -378,3 +377,5 @@ script = ExtResource("4_6ovvo")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(11.0502, -2.07652)
 shape = SubResource("RectangleShape2D_y7t7n")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]

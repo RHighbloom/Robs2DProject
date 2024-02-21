@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://deklmirxpg34w"]
 
-[ext_resource type="Script" path="res://gate.gd" id="1_uoffe"]
+[ext_resource type="Script" path="res://objects/gate.gd" id="1_uoffe"]
 [ext_resource type="Texture2D" uid="uid://d24y01wjbu4b1" path="res://textures/legacy-dungeon/Assets.png" id="1_yqxr8"]
 [ext_resource type="AudioStream" uid="uid://cgv4oubl150lv" path="res://sounds/use-key-101soundboards.mp3" id="2_8lf7i"]
 
