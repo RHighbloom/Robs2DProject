@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://yueaocbor7sc"]
+[gd_scene load_steps=15 format=3 uid="uid://yueaocbor7sc"]
 
 [ext_resource type="Script" path="res://objects/lever.gd" id="1_o3wmr"]
 [ext_resource type="Texture2D" uid="uid://d24y01wjbu4b1" path="res://textures/legacy-dungeon/Assets.png" id="2_8y8i6"]
 [ext_resource type="Script" path="res://objects/Toggleable.gd" id="3_7sih5"]
+[ext_resource type="AudioStream" uid="uid://dc4m7missq11a" path="res://sounds/button-101soundboards.mp3" id="4_hj37i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1hqjq"]
 size = Vector2(14, 12)
@@ -79,6 +80,9 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeStateMachine_h05pc")
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_hj37i")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

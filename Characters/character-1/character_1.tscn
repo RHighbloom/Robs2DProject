@@ -3,7 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://bolbm4qrw23u5" path="res://textures/v2.1/adventurer-1.3-Sheet.png" id="1_m5tiq"]
 [ext_resource type="Script" path="res://Characters/character-1/character_1.gd" id="1_o5ok7"]
 [ext_resource type="Script" path="res://Characters/character-1/SwordArea.gd" id="3_nf0o0"]
-[ext_resource type="Script" path="res://Characters/character-1/WallHangArea.gd" id="4_3yd56"]
+[ext_resource type="Script" path="res://Characters/character-1/SwordCollision.gd" id="4_70whx"]
+[ext_resource type="AudioStream" uid="uid://40m25x0ak0ew" path="res://sounds/sword-101soundboards.mp3" id="5_u5u18"]
 
 [sub_resource type="Animation" id="Animation_yotem"]
 length = 0.001
@@ -46,22 +47,10 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("WallHangArea:scale")
+tracks/3/path = NodePath("Sprite2D:flip_h")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("WallHangArea:monitoring")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -114,10 +103,34 @@ tracks/3/path = NodePath("SwordArea:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0.2, 0.4),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-1, 1), Vector2(1, 1)]
+"values": [Vector2(-1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SwordArea/SwordCollision:disabled")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1e-05),
+"update": 1,
+"values": [false, true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AudioStreamPlayer2D:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_lok4j"]
@@ -146,6 +159,30 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SwordArea/SwordCollision:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1e-05),
+"update": 1,
+"values": [false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AudioStreamPlayer2D:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_usb8t"]
@@ -301,6 +338,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_b63ky"]
 resource_name = "jump_left"
 length = 0.72
+step = 0.08
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -692,9 +730,6 @@ graph_offset = Vector2(-655.822, -175)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txih2"]
 size = Vector2(14, 26.5)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fynsy"]
-size = Vector2(5, 12)
-
 [node name="Character-1" type="CharacterBody2D"]
 script = ExtResource("1_o5ok7")
 
@@ -726,15 +761,10 @@ script = ExtResource("3_nf0o0")
 [node name="SwordCollision" type="CollisionShape2D" parent="SwordArea"]
 position = Vector2(15, 3)
 shape = SubResource("RectangleShape2D_txih2")
+script = ExtResource("4_70whx")
 
-[node name="WallHangArea" type="Area2D" parent="."]
-monitoring = false
-script = ExtResource("4_3yd56")
-
-[node name="WallHangCollision" type="CollisionShape2D" parent="WallHangArea"]
-position = Vector2(8, -13)
-shape = SubResource("RectangleShape2D_fynsy")
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_u5u18")
 
 [connection signal="animation_finished" from="AnimationTree" to="." method="_on_animation_tree_animation_finished"]
 [connection signal="body_entered" from="SwordArea" to="SwordArea" method="_on_body_entered"]
-[connection signal="body_entered" from="WallHangArea" to="WallHangArea" method="_on_body_entered"]

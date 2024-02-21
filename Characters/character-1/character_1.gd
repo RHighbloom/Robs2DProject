@@ -1,6 +1,8 @@
 extends CharacterBody2D
 @onready var animation_tree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
+@onready var audio_player : AudioStreamPlayer2D = get_child(5)
+
 
 const SPEED = 75.0
 const JUMP_VELOCITY = -300.0
@@ -66,11 +68,6 @@ func set_current_state(new_state):
 	current_state = new_state
 
 func _physics_process(delta):
-	
-	if (is_on_wall_only() && current_state == STATE.JUMP && velocity.y > -150.0):
-		velocity.y = 0
-		set_current_state(STATE.WALLHANG)
-		
 	#add gravity
 	add_gravity(delta)
 	
