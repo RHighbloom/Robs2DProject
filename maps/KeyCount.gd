@@ -1,6 +1,6 @@
 extends RichTextLabel
 
-var count: int = 0
+@export var count: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -11,4 +11,11 @@ func update_text():
 
 func _on_key_rigid_body_2d_add_key():
 	count += 1
+	update_text()
+	
+
+
+
+func _on_gate_static_body_use_key():
+	count -= 1
 	update_text()

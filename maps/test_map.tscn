@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bdyntrmwck5ei"]
+[gd_scene load_steps=10 format=3 uid="uid://bdyntrmwck5ei"]
 
 [ext_resource type="PackedScene" uid="uid://drql0bw4g2uyx" path="res://Characters/character-1/character_1.tscn" id="1_ur3pp"]
 [ext_resource type="PackedScene" uid="uid://c2y6by8f453mu" path="res://maps/tile_map.tscn" id="2_eqfot"]
@@ -8,8 +8,23 @@
 [ext_resource type="PackedScene" uid="uid://b576wkncvkf0m" path="res://objects/key.tscn" id="6_tmtcr"]
 [ext_resource type="Script" path="res://maps/KeyCount.gd" id="7_pb5hq"]
 [ext_resource type="AudioStream" uid="uid://bkds7ybt4rr5f" path="res://sounds/Ambient 10.wav" id="8_wt1sm"]
+[ext_resource type="PackedScene" uid="uid://deklmirxpg34w" path="res://gate.tscn" id="9_0w2tv"]
 
 [node name="TestMap" type="Node2D"]
+
+[node name="KeyCount" type="RichTextLabel" parent="."]
+offset_right = 84.0
+offset_bottom = 40.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 0
+theme_override_font_sizes/italics_font_size = 0
+theme_override_font_sizes/bold_italics_font_size = 0
+theme_override_font_sizes/mono_font_size = 0
+text = "THIS IS TEST TEXT"
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("7_pb5hq")
 
 [node name="Character-1" parent="." instance=ExtResource("1_ur3pp")]
 top_level = true
@@ -39,23 +54,15 @@ position = Vector2(68, 224)
 [node name="KeyRigidBody2D" parent="." instance=ExtResource("6_tmtcr")]
 position = Vector2(38, 174)
 
-[node name="KeyCount" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 10
-theme_override_font_sizes/bold_font_size = 0
-theme_override_font_sizes/italics_font_size = 0
-theme_override_font_sizes/bold_italics_font_size = 0
-theme_override_font_sizes/mono_font_size = 0
-text = "THIS IS TEST TEXT"
-fit_content = true
-autowrap_mode = 0
-script = ExtResource("7_pb5hq")
-
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_wt1sm")
 volume_db = -5.174
 autoplay = true
 
+[node name="GateStaticBody" parent="." instance=ExtResource("9_0w2tv")]
+position = Vector2(256, 208)
+
 [connection signal="add_key" from="KeyRigidBody2D" to="KeyCount" method="_on_key_rigid_body_2d_add_key"]
+[connection signal="add_key" from="KeyRigidBody2D" to="Character-1" method="_on_key_rigid_body_2d_add_key"]
+[connection signal="useKey" from="GateStaticBody" to="KeyCount" method="_on_gate_static_body_use_key"]
+[connection signal="useKey" from="GateStaticBody" to="Character-1" method="_on_gate_static_body_use_key"]

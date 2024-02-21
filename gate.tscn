@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://deklmirxpg34w"]
+[gd_scene load_steps=6 format=3 uid="uid://deklmirxpg34w"]
 
 [ext_resource type="Script" path="res://gate.gd" id="1_uoffe"]
 [ext_resource type="Texture2D" uid="uid://d24y01wjbu4b1" path="res://textures/legacy-dungeon/Assets.png" id="1_yqxr8"]
+[ext_resource type="AudioStream" uid="uid://cgv4oubl150lv" path="res://sounds/use-key-101soundboards.mp3" id="2_8lf7i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ixoft"]
 size = Vector2(16, 32)
@@ -11,6 +12,9 @@ size = Vector2(18, 32)
 
 [node name="GateStaticBody" type="StaticBody2D"]
 script = ExtResource("1_uoffe")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_8lf7i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -16)
@@ -26,7 +30,6 @@ region_rect = Rect2(144, 80, 16, 16)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_ixoft")
-disabled = true
 
 [node name="Area2D" type="Area2D" parent="."]
 
@@ -34,4 +37,5 @@ disabled = true
 position = Vector2(-1, -8)
 shape = SubResource("RectangleShape2D_wj0xb")
 
+[connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_audio_stream_player_2d_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

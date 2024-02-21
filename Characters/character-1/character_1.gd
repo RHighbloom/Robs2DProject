@@ -1,4 +1,6 @@
 extends CharacterBody2D
+class_name Player
+
 @onready var animation_tree = $AnimationTree
 @onready var state_machine = animation_tree.get("parameters/playback")
 @onready var audio_player : AudioStreamPlayer2D = get_child(5)
@@ -8,6 +10,7 @@ const SPEED = 75.0
 const JUMP_VELOCITY = -300.0
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+
 ##Used to determine which animation to be playing -
 enum STATE {IDLE, WALK, JUMP, ROLL, SLIDE, GETUP, ATTACK, WALLHANG, FALL}
 enum DIRECTION {LEFT, RIGHT}
@@ -15,6 +18,7 @@ enum DIRECTION {LEFT, RIGHT}
 var current_state = STATE.IDLE
 var last_direction = DIRECTION.RIGHT
 
+var key_count = 0
 
 ##Function
 
@@ -145,3 +149,11 @@ func _on_animation_tree_animation_finished(anim_name):
 		set_current_state(STATE.FALL)
 	elif (anim_name.contains("hang")):
 		set_current_state(STATE.IDLE)
+
+
+func _on_key_rigid_body_2d_add_key():
+	key_count += 1
+
+
+func _on_gate_static_body_use_key():
+	key_count -= 1
