@@ -105,7 +105,7 @@ func _physics_process(delta):
 #----------------------------------------------------------------------------------------
 
 func add_gravity(delta):
-	if (not is_on_floor() && not is_on_wall()):
+	if (not is_on_floor()):
 		velocity.y += gravity * delta
 	if (velocity.y > 0 && !compare_state_priority(current_state, STATE.FALL)):
 		set_current_state(STATE.FALL)
